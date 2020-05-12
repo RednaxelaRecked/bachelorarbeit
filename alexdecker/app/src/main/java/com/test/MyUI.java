@@ -2,12 +2,20 @@ package com.test;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.test.services.BookService;
+import com.test.services.BookServiceImpl;
+import com.test.services.Format;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.ErrorMessage;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
+import io.swagger.client.ApiException;
+import io.swagger.client.model.Book;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window
