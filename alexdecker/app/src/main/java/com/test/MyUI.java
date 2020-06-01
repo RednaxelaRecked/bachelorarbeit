@@ -54,6 +54,31 @@ public class MyUI extends UI {
             }
         });
 
+        /*
+        https://futurepress.github.io/epubjs-reader/index.html?bookPath= + Link übergeben
+        BookService bookService = null;
+        try {
+            bookService = new BookServiceImpl();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Book> books = bookService.getAllBooks();
+
+        try {
+
+            for(Book book : books){
+                System.out.println(book.getCreator());
+                System.out.println(book.getTitle());
+                System.out.println(book.getId());
+                System.out.println(bookService.getDownloadUrlOfBook(Format.EPUB, book.getId()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+        */
+
         cssLayout.addComponent(component);
         component.setStyleName("login");
         cssLayout.setSizeFull();

@@ -1,14 +1,26 @@
 package com.test;
 
+import com.test.services.BookService;
+import com.test.services.BookServiceImpl;
+import com.test.services.Format;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
+import io.swagger.client.ApiException;
+import io.swagger.client.model.Book;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Logger;
 
 
 public class WindowLayout extends VerticalLayout {
+
+    private Logger logger = Logger.getLogger(WindowLayout.class.getName());
 
     public WindowLayout() {
         HorizontalLayout headerLayout = createHeaderComponent();
@@ -149,7 +161,10 @@ public class WindowLayout extends VerticalLayout {
         Label caption = new Label("Course Info");
         caption.setId("contentCaption");
         caption.setStyleName(ValoTheme.LABEL_H2);
-
+       
+        
+        layout1.addComponent(new Button("",clickEvent -> clickEvent.getButton()));
+        
         layout1.addComponent(caption);
         for (int j = 0; j < 1; j++) {
             layout1.addComponent(getCenterContentText(j, "Course" + j, " This is the course the course information of course  " + j));
@@ -240,12 +255,36 @@ public class WindowLayout extends VerticalLayout {
         Label label = new Label("Ubersicht");
         label.setStyleName(ValoTheme.LABEL_H2);
 
-        MenuBar menuBar = new MenuBar();
+        Button menuBar = new Button("Kurs 1");
         // menuBar.setStyleName(ValoTheme.MENUBAR_BORDERLESS);
         menuBar.setId("menuBar2");
+        menuBar.addClickListener(clickEvent -> {
+            //Notification.show("geklickt");
+            logger.info("Open book ...");
+            BookService bookService = null;
+            try {
+                logger.info("Init bookservice ...");
+                bookService = new BookServiceImpl();
+                List<Book> books = bookService.getAllBooks();
+                logger.info("size of books: " + books.size());
+                Book book = books.get(0);
+                String bookUrl = bookService.getDownloadUrlOfBook(Format.EPUB, book.getId());
+                logger.info("Download url of book: " + bookUrl);
+                String epubReader = "https://futurepress.github.io/epubjs-reader/index.html?bookPath=" + bookUrl;
+                logger.info("Epub reader path: " + epubReader);
 
-        MenuBar.MenuItem menuItem2 = menuBar.addItem("Atkionin", null);
-        menuItem2.addItem("test1", null);
+                BrowserFrame browser = new BrowserFrame("Epub Reader", new ExternalResource(epubReader));
+                browser.setWidth("600px");
+                browser.setHeight("400px");
+                middleLayout.addComponent(browser);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+
+
+        });
 
         middleLayout.addComponents(label, menuBar);
 
@@ -304,6 +343,9 @@ public class WindowLayout extends VerticalLayout {
         Label labe2 = new Label("");
         labe2.setStyleName(ValoTheme.LABEL_COLORED);
         VerticalLayout layout = new VerticalLayout(label, labe2);
+        Button button1 = new Button();
+
+        
 
         Image image = new Image("", new ThemeResource("circle.png"));
         image.setSizeFull();
