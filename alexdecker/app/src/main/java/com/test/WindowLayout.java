@@ -274,9 +274,24 @@ public class WindowLayout extends VerticalLayout {
                 logger.info("Epub reader path: " + epubReader);
 
                 BrowserFrame browser = new BrowserFrame("Epub Reader", new ExternalResource(epubReader));
-                browser.setWidth("600px");
-                browser.setHeight("400px");
+                browser.setWidth("800px");
+                browser.setHeight("600px");
                 middleLayout.addComponent(browser);
+
+                // Create a sub-window and set the content
+                Window subWindow = new Window("Sub-window");
+                VerticalLayout subContent = new VerticalLayout();
+                subContent.setMargin(true);
+                subWindow.setContent(subContent);
+
+                // Put the browser frame
+                subContent.addComponent(browser);
+
+                // Center it in the browser window
+                subWindow.center();
+
+                // Open it in the main UI
+                getUI().addWindow(subWindow);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ApiException e) {
